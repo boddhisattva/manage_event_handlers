@@ -1,24 +1,34 @@
 describe EventsManager do
   describe "#subscribe" do
-    context "argument to subscribe to is nil" do
-      it "does not store nil handler values" do
+    context "event name is nil" do
+      it "raises Argument Error" do
         events_manager = EventsManager.new
-        add_nums = nil
+        event_name = nil
 
-        events_manager.subscribe(add_nums)
+        expect { events_manager.subscribe(event_name) do |name|
+          puts "Hello #{name}"
+        end }.to raise_error(ArgumentError)
+      end
+    end
 
-        expect(events_manager.subscribers).to be_empty
+    context "block is not passed" do
+      it "raises Argument Error" do
+        events_manager = EventsManager.new
+        add_nums = :add_numbers
+
+        expect { events_manager.subscribe(add_nums) }.to raise_error(ArgumentError)
       end
     end
 
     context "given a block to subscribe to" do
       it "stores the block as a handler" do
         events_manager = EventsManager.new
-        add_nums = lambda { |a, b| a + b }
 
-        events_manager.subscribe(add_nums)
+        events_manager.subscribe(:add_numbers) do |a, b|
+          a + b
+        end
 
-        expect(events_manager.subscribers.first).to eq(add_nums)
+        expect(events_manager.subscribers).not_to be_empty
       end
     end
   end
