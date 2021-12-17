@@ -54,6 +54,15 @@ describe EventsManager do
         end
       end
 
+      context "event name is not passed" do
+        it "raises Argument Error" do
+          events_manager = EventsManager.new
+          event_name = nil
+
+          expect { events_manager.broadcast(event_name, "Ronnie", "Bo") }.to raise_error(ArgumentError)
+        end
+      end
+
       context "event name does not exist among list of subscriber events" do
         it "none of the one or many subscribers initiate a listener call" do
           events_manager = EventsManager.new
