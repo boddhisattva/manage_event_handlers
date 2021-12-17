@@ -32,4 +32,41 @@ describe EventsManager do
       end
     end
   end
+
+  describe "#broadcast" do
+    context "given an event name and an arbitrary number of arguments" do
+      context "event name exists among list of subscriber events" do
+        it "each subscriber listening to the event initiates a listener call" do
+          events_manager = EventsManager.new
+
+          events_manager.subscribe(:add_numbers) do |a, b|
+            a + b
+          end
+
+          events_manager.subscribe(:add_numbers) do |*a|
+            a.sum
+          end
+
+          expect(events_manager.subscribers.first).to receive(:initiate_listener_call).once
+          expect(events_manager.subscribers.to_a.last).to receive(:initiate_listener_call).once
+
+          events_manager.broadcast(:add_numbers, 4, 5)
+        end
+      end
+
+      context "event name does not exist among list of subscriber events" do
+        it "none of the one or many subscribers initiate a listener call" do
+          events_manager = EventsManager.new
+
+          events_manager.subscribe(:add_numbers) do |a, b|
+            a + b
+          end
+
+          expect(events_manager.subscribers.first).not_to receive(:initiate_listener_call)
+
+          events_manager.broadcast(:add_nums, 4, 5)
+        end
+      end
+    end
+  end
 end
