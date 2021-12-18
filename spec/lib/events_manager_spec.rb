@@ -24,11 +24,9 @@ describe EventsManager do
       it "stores the block as a handler" do
         events_manager = EventsManager.new
 
-        events_manager.subscribe(:add_numbers) do |a, b|
+        expect { events_manager.subscribe(:add_numbers) do |a, b|
           a + b
-        end
-
-        expect(events_manager.subscribers).not_to be_empty
+        end }.to change{ events_manager.subscribers.count }.from(0).to(1)
       end
     end
   end
