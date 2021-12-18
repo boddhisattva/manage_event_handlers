@@ -94,8 +94,13 @@ describe EventsManager do
             a.sum
           end
 
+          last_subscriber = events_manager.subscribers.to_a.last
+
+          allow(events_manager.subscribers.first).to receive(:listening_on?) { true }
+          allow(last_subscriber).to receive(:listening_on?) { true }
+
           expect(events_manager.subscribers.first).to receive(:initiate_listener_call).once
-          expect(events_manager.subscribers.to_a.last).to receive(:initiate_listener_call).once
+          expect(last_subscriber).to receive(:initiate_listener_call).once
 
           events_manager.broadcast(:add_numbers, 4, 5)
         end
@@ -108,6 +113,8 @@ describe EventsManager do
           events_manager.subscribe(:add_numbers) do |a, b|
             a + b
           end
+
+          allow(events_manager.subscribers.first).to receive(:listening_on?) { false }
 
           expect(events_manager.subscribers.first).not_to receive(:initiate_listener_call)
 
