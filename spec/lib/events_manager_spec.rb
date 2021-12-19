@@ -1,7 +1,7 @@
 describe EventsManager do
   describe "#subscribe" do
     context "event name is nil" do
-      it "raises Argument Error" do
+      it "raises Argument Error with an appropriate error message" do
         events_manager = EventsManager.new
         event_name = nil
 
@@ -12,7 +12,7 @@ describe EventsManager do
     end
 
     context "block is not passed" do
-      it "raises Argument Error" do
+      it "raises Argument Error with an appropriate error message" do
         events_manager = EventsManager.new
         add_nums = :add_numbers
 
@@ -135,7 +135,7 @@ describe EventsManager do
       end
 
       context "event name is not passed" do
-        it "raises Argument Error" do
+        it "raises Argument Error with an appropriate error message" do
           events_manager = EventsManager.new
           event_name = nil
 

@@ -5,10 +5,14 @@ class Event
   end
 
   def listening_on?(event_name)
+    raise ArgumentError, 'An event name needs to be specified' if event_name.nil?
+
     event_name == name
   end
 
   def has_matching_listener?(&block)
+    raise ArgumentError, 'A block needs to be passed' if !block
+
     listener == block
   end
 

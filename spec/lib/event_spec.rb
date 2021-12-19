@@ -19,6 +19,16 @@ describe Event do
         expect(event.listening_on?(:add_nos)).to be false
       end
     end
+
+    context "event name is nil" do
+      it "raises Argument Error with an appropriate error message" do
+        add_nums = lambda { |a, b| a + b }
+        event = Event.new(:add_numbers, add_nums)
+        event_name = nil
+
+        expect { event.listening_on?(event_name) }.to raise_error(ArgumentError, 'An event name needs to be specified')
+      end
+    end
   end
 
   describe "#has_matching_listener?" do
@@ -44,6 +54,15 @@ describe Event do
       end
     end
 
+    context 'block is nil' do
+      it 'raises an Argument Error with an appropriate error message' do
+        add_nums = lambda { |a, b| a + b }
+        event = Event.new(:add_numbers, add_nums)
+        empty_block = nil
+
+        expect { event.has_matching_listener?(&empty_block) }.to raise_error(ArgumentError, 'A block needs to be passed')
+      end
+    end
   end
 
   describe "#initiate_listener_call" do
