@@ -7,7 +7,7 @@ describe EventsManager do
 
         expect { events_manager.subscribe(event_name) do |name|
           puts "Hello #{name}"
-        end }.to raise_error(ArgumentError)
+        end }.to raise_error(ArgumentError, 'An event name needs to be specified')
       end
     end
 
@@ -16,7 +16,7 @@ describe EventsManager do
         events_manager = EventsManager.new
         add_nums = :add_numbers
 
-        expect { events_manager.subscribe(add_nums) }.to raise_error(ArgumentError)
+        expect { events_manager.subscribe(add_nums) }.to raise_error(ArgumentError, 'A block needs to be passed')
       end
     end
 
@@ -87,7 +87,7 @@ describe EventsManager do
         events_manager = EventsManager.new
         empty_block = nil
 
-        expect { events_manager.unsubscribe(&empty_block) }.to raise_error(ArgumentError)
+        expect { events_manager.unsubscribe(&empty_block) }.to raise_error(ArgumentError, 'A block needs to be passed')
       end
     end
   end
@@ -139,7 +139,7 @@ describe EventsManager do
           events_manager = EventsManager.new
           event_name = nil
 
-          expect { events_manager.broadcast(event_name, "Ronnie", "Bo") }.to raise_error(ArgumentError)
+          expect { events_manager.broadcast(event_name, "Ronnie", "Bo") }.to raise_error(ArgumentError, 'An event name needs to be specified')
         end
       end
     end
