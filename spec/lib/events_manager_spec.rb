@@ -28,6 +28,18 @@ describe EventsManager do
           a + b
         end }.to change{ events_manager.subscribers.count }.from(0).to(1)
       end
+
+      context "same handler(i.e., event name and block) is passed multiple times" do
+        it "raises Duplicate Handler error" do
+          events_manager = EventsManager.new
+          add_numbers = lambda { |a, b| a + b }
+          message = 'An event handler comprising of an event name and a block can only be subscribed to once at a given point in time'
+
+          events_manager.subscribe(:add_numbers, &add_numbers)
+
+          expect { events_manager.subscribe(:add_numbers, &add_numbers) }.to raise_error(DuplicateHandlerError, message)
+        end
+      end
     end
   end
 
