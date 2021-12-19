@@ -1,31 +1,35 @@
 describe EventsManager do
   let(:events_manager) { EventsManager.new }
 
-  describe "#subscribe" do
-    context "event name is nil" do
-      it "raises Argument Error with an appropriate error message" do
-        expect { events_manager.subscribe(nil) do |name|
-          puts "Hello #{name}"
-        end }.to raise_error(ArgumentError, 'An event name needs to be specified')
+  describe '#subscribe' do
+    context 'event name is nil' do
+      it 'raises Argument Error with an appropriate error message' do
+        expect do
+          events_manager.subscribe(nil) do |name|
+            puts "Hello #{name}"
+          end
+        end.to raise_error(ArgumentError, 'An event name needs to be specified')
       end
     end
 
-    context "block is not passed" do
-      it "raises Argument Error with an appropriate error message" do
+    context 'block is not passed' do
+      it 'raises Argument Error with an appropriate error message' do
         expect { events_manager.subscribe(:add_numbers) }.to raise_error(ArgumentError, 'A block needs to be passed')
       end
     end
 
-    context "given a block to subscribe to" do
-      it "stores the block as a handler" do
-        expect { events_manager.subscribe(:add_numbers) do |a, b|
-          a + b
-        end }.to change{ events_manager.subscribers.count }.from(0).to(1)
+    context 'given a block to subscribe to' do
+      it 'stores the block as a handler' do
+        expect do
+          events_manager.subscribe(:add_numbers) do |a, b|
+            a + b
+          end
+        end.to change { events_manager.subscribers.count }.from(0).to(1)
       end
 
-      context "same handler(i.e., event name and block) is passed multiple times" do
-        it "raises Duplicate Handler error" do
-          add_numbers = lambda { |a, b| a + b }
+      context 'same handler(i.e., event name and block) is passed multiple times' do
+        it 'raises Duplicate Handler error' do
+          add_numbers = ->(a, b) { a + b }
           message = 'An event handler comprising of an event name and a block can only be subscribed to once at a given point in time'
 
           events_manager.subscribe(:add_numbers, &add_numbers)
@@ -36,11 +40,11 @@ describe EventsManager do
     end
   end
 
-  describe "#unsubscribe" do
+  describe '#unsubscribe' do
     context 'given a block' do
       context 'block exists among list of subscribers' do
         it 'removes it from the list of handlers and reduces the count of subscribers by 1' do
-          add_nums = lambda { |a, b| a + b }
+          add_nums = ->(a, b) { a + b }
 
           events_manager.subscribe(:add_numbers, &add_nums)
           events_manager.subscribe(:subtract_numbers) do |a, b|
@@ -49,14 +53,14 @@ describe EventsManager do
 
           allow(events_manager.subscribers).to receive(:detect) { events_manager.subscribers.first }
 
-          expect { events_manager.unsubscribe(&add_nums) }.to change{ events_manager.subscribers.count }.from(2).to(1)
+          expect { events_manager.unsubscribe(&add_nums) }.to change { events_manager.subscribers.count }.from(2).to(1)
         end
       end
 
       context 'block does not exists among list of subscribers' do
         it 'the list of handlers and the count of total subscribers remain the same' do
-          add_nums = lambda { |a, b| a + b }
-          add_numbers = lambda { |a, b| a + b }
+          add_nums = ->(a, b) { a + b }
+          add_numbers = ->(a, b) { a + b }
 
           events_manager.subscribe(:add_numbers, &add_numbers)
           events_manager.subscribe(:add_nos) do |*a|
@@ -65,10 +69,9 @@ describe EventsManager do
 
           allow(events_manager.subscribers).to receive(:detect) { nil }
 
-          expect { events_manager.unsubscribe(&add_nums) }.to_not change{ events_manager.subscribers.count }
+          expect { events_manager.unsubscribe(&add_nums) }.to_not change { events_manager.subscribers.count }
         end
       end
-
     end
 
     context 'block is nil' do
@@ -80,10 +83,10 @@ describe EventsManager do
     end
   end
 
-  describe "#broadcast" do
-    context "given an event name and an arbitrary number of arguments" do
-      context "event name exists among list of subscriber events" do
-        it "each subscriber listening to the event initiates a listener call" do
+  describe '#broadcast' do
+    context 'given an event name and an arbitrary number of arguments' do
+      context 'event name exists among list of subscriber events' do
+        it 'each subscriber listening to the event initiates a listener call' do
           events_manager.subscribe(:add_numbers) do |a, b|
             a + b
           end
@@ -104,8 +107,8 @@ describe EventsManager do
         end
       end
 
-      context "event name does not exist among list of subscriber events" do
-        it "none of the one or many subscribers initiate a listener call" do
+      context 'event name does not exist among list of subscriber events' do
+        it 'none of the one or many subscribers initiate a listener call' do
           events_manager.subscribe(:add_numbers) do |a, b|
             a + b
           end
@@ -118,9 +121,11 @@ describe EventsManager do
         end
       end
 
-      context "event name is not passed" do
-        it "raises Argument Error with an appropriate error message" do
-          expect { events_manager.broadcast(nil, "Ronnie", "Bo") }.to raise_error(ArgumentError, 'An event name needs to be specified')
+      context 'event name is not passed' do
+        it 'raises Argument Error with an appropriate error message' do
+          expect do
+            events_manager.broadcast(nil, 'Ronnie', 'Bo')
+          end.to raise_error(ArgumentError, 'An event name needs to be specified')
         end
       end
     end

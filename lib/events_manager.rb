@@ -9,7 +9,7 @@ class EventsManager
 
   def subscribe(event_name, &block)
     raise ArgumentError, 'An event name needs to be specified' if event_name.nil?
-    raise ArgumentError, 'A block needs to be passed' if !block
+    raise ArgumentError, 'A block needs to be passed' unless block
 
     if event_handler_not_already_present?(event_name, &block)
       subscribers << Event.new(event_name, block)
@@ -20,7 +20,7 @@ class EventsManager
   end
 
   def unsubscribe(&block)
-    raise ArgumentError, 'A block needs to be passed' if !block
+    raise ArgumentError, 'A block needs to be passed' unless block
 
     matched_subscriber = subscribers.detect { |subscriber| subscriber.has_matching_listener?(&block) }
     subscribers.delete(matched_subscriber) if matched_subscriber

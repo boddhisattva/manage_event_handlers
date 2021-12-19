@@ -11,7 +11,7 @@ class Event
   end
 
   def has_matching_listener?(&block)
-    raise ArgumentError, 'A block needs to be passed' if !block
+    raise ArgumentError, 'A block needs to be passed' unless block
 
     listener == block
   end
@@ -21,5 +21,6 @@ class Event
   end
 
   private
-    attr_reader :name, :listener
+
+  attr_reader :name, :listener
 end
