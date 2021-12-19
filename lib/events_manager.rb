@@ -35,7 +35,7 @@ class EventsManager
   end
 
   def event_handler_not_already_present?(event_name, &block)
-    !subscribers.any? do |subscriber|
+    subscribers.none? do |subscriber|
       subscriber.listening_on?(event_name) && subscriber.has_matching_listener?(&block)
     end
   end
