@@ -1,3 +1,5 @@
+require 'set'
+
 class DuplicateHandlerError < StandardError; end
 
 class EventsManager
