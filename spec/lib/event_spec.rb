@@ -29,7 +29,7 @@ describe Event do
       end
     end
 
-    context 'Given event block does not exists among list of existing events' do
+    context 'Given event block does not exist among list of existing events' do
       it 'returns false' do
         add_nos = ->(*a) { a.sum }
 

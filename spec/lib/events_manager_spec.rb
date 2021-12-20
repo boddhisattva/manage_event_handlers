@@ -57,7 +57,7 @@ describe EventsManager do
         end
       end
 
-      context 'block does not exists among list of subscribers' do
+      context 'block does not exist among list of subscribers' do
         it 'the list of handlers and the count of total subscribers remain the same' do
           add_nums = ->(a, b) { a + b }
           add_numbers = ->(a, b) { a + b }
@@ -108,7 +108,7 @@ describe EventsManager do
       end
 
       context 'event name does not exist among list of subscriber events' do
-        it 'none of the one or many subscribers initiate a listener call' do
+        it 'none of the subscribers initiate a listener call' do
           events_manager.subscribe(:add_numbers) do |a, b|
             a + b
           end
