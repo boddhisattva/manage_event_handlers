@@ -28,7 +28,7 @@ describe EventsManager do
       end
 
       context 'same handler(i.e., event name and block) is passed multiple times' do
-        it 'raises Duplicate Handler error' do
+        it 'raises Duplicate Handler error with an appropriate error message' do
           add_numbers = ->(a, b) { a + b }
           message = 'An event handler comprising of an event name and a block can only be subscribed to once at a given point in time'
 
