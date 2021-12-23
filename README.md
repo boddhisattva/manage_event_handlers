@@ -2,7 +2,7 @@
 
 ## About
 
-This is a program to manage events and their handlers.
+This is a program to manage events and their handlers. One can find the detailed problem statement [here](https://github.com/boddhisattva/manage_event_handlers/blob/main/problem_statement.md)
 
 ## Code Related Design Decisions
 
